@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30406.217
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Actividad1", "Actividad1\Actividad1.csproj", "{AF56EAE3-D610-40E6-9B1C-883D928ABFEA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FruitStore", "..\..\Actividad 1\FruitStore\FruitStore\FruitStore.csproj", "{6CBB117B-1A66-4911-A1F0-6CD7D97E0146}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AF56EAE3-D610-40E6-9B1C-883D928ABFEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF56EAE3-D610-40E6-9B1C-883D928ABFEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF56EAE3-D610-40E6-9B1C-883D928ABFEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF56EAE3-D610-40E6-9B1C-883D928ABFEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CBB117B-1A66-4911-A1F0-6CD7D97E0146}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CBB117B-1A66-4911-A1F0-6CD7D97E0146}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CBB117B-1A66-4911-A1F0-6CD7D97E0146}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CBB117B-1A66-4911-A1F0-6CD7D97E0146}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8D667BA1-7B15-41A2-AA2B-DBF5696383B1}
+	EndGlobalSection
+EndGlobal
