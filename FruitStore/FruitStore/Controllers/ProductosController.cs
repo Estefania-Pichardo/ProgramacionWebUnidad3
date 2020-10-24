@@ -27,7 +27,7 @@ namespace FruitStore.Controllers
             ProductosRepository productosRepository = new ProductosRepository(context);
 
             int? id = null;
-            vm.Categorias = categoriasRepository.GetAll();
+            vm.Categorias = categoriasRepository.GetAll().Where(x => x.Eliminado == 0);
             vm.Productos = productosRepository.GetProductosByCategoria(id);
 
             return View(vm);
@@ -40,8 +40,17 @@ namespace FruitStore.Controllers
             CategoriasRepository categoriasRepository = new CategoriasRepository(context);
             ProductosRepository productosRepository = new ProductosRepository(context);
 
-            vm.Categorias = categoriasRepository.GetAll();
-            vm.Productos = productosRepository.GetProductosByCategoria(vm.IdCategoria);
+            vm.Categorias = categoriasRepository.GetAll().Where(x => x.Eliminado == 0);
+
+            if(vm.IdCategoria==0)
+            {
+                int? id = null;
+                vm.Productos = productosRepository.GetProductosByCategoria(id);
+            }
+            else
+            {
+                vm.Productos = productosRepository.GetProductosByCategoria(vm.IdCategoria);
+            }
 
             return View(vm);
         }
