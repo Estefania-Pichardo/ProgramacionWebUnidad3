@@ -69,17 +69,29 @@ namespace FruitStore.Controllers
         {
             fruteriashopContext context = new fruteriashopContext();
 
-            //Guardar el archivo
-            if (vm.Archivo.ContentType != "image/jpeg" || vm.Archivo.Length > 1024 * 1024 * 2)
-            {
-                ModelState.AddModelError("", "Debe seleccionar un archivo jpeg menor a 2mb.");
-                CategoriasRepository categoriasRepository = new CategoriasRepository(context);
-                vm.Categorias = categoriasRepository.GetAll();
-                return View(vm);
-            }
+            
 
             try
             {
+                if(vm.Archivo==null)
+                {
+                    ModelState.AddModelError("", "Debe seleccionar una imagen para el producto");
+                    CategoriasRepository categoriasRepository = new CategoriasRepository(context);
+                    vm.Categorias = categoriasRepository.GetAll();
+                    return View(vm);
+
+                }
+                else
+                {
+                    //Guardar el archivo
+                    if (vm.Archivo.ContentType != "image/jpeg" || vm.Archivo.Length > 1024 * 1024 * 2)
+                    {
+                        ModelState.AddModelError("", "Debe seleccionar un archivo jpeg menor a 2mb.");
+                        CategoriasRepository categoriasRepository = new CategoriasRepository(context);
+                        vm.Categorias = categoriasRepository.GetAll();
+                        return View(vm);
+                    }
+                }
 
                 ProductosRepository repos = new ProductosRepository(context);
                 repos.Insert(vm.Producto);
