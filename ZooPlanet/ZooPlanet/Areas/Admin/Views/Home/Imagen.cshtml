@@ -1,0 +1,46 @@
+﻿@{
+	Layout = "_Layout";
+}
+
+<h1>Agregar imagen a especie</h1>
+
+<form method="post">
+    <input type="hidden" />
+    <label>Nombre:</label>
+    <input type="text" readonly />
+    <label>Imagen:</label>
+    <input id="fileUpload1" required type="file" accept="image/jpg" />
+
+    <img id="imagePreview" src="~/especies/1.jpg" height="100" />
+
+    <p class="error">* Es posible que la imagen anterior permanezca guardada en cache por el navegador.</p>
+
+
+
+    <input type="submit" value="Guardar" />
+    <a href="~/Administrador">
+        <input type="button" value="Cancelar" />
+    </a>
+</form>
+
+<script>
+    function mostrarImagen(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imagePreview').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+
+    $(document).ready(function () {
+        $("#fileUpload1").change(function () {
+            mostrarImagen(this);
+        });
+    });
+
+</script>
+
+
