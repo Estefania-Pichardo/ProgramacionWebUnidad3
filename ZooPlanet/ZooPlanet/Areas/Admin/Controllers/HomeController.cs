@@ -141,7 +141,6 @@ namespace ZooPlanet.Areas.Admin.Controllers
         }
 
         
-
         public IActionResult Imagen(int id)
         {
             return View();

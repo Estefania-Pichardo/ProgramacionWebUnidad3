@@ -10,16 +10,16 @@
 </head>
 <body>
     <header>
-        <h1><a href="~/Home"><b>Zoo</b>Planet</a></h1>
+        <h1><a href="~/"><b>Zoo</b>Planet</a></h1>
         <nav>
             <ul>
-                <li><a href="~/Home">Home</a></li>
+                <li><a href="~/">Home</a></li>
                 <li>
                     <a href="#">Clasificación</a>
                     <ul>
                         @foreach (var m in menu.Clases)
                         {
-                        <li><a href="~/Home/Clase/@m.Nombre">@m.Nombre</a></li>
+                        <li><a href="~/@m.Nombre">@m.Nombre</a></li>
                         }
                     </ul>
                 </li>

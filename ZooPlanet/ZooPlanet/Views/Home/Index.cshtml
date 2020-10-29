@@ -12,7 +12,7 @@
     @foreach (var item in Model)
     {
         <div>
-            <a href="~/Home/Clase/@item.Nombre">
+            <a href="~/@item.Nombre">
                 <img src="~/clases/@(item.Id).jpg" />
                 <h1>@item.Nombre</h1>
                 <p>@item.Descripcion.</p>
