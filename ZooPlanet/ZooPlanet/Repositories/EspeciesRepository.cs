@@ -31,8 +31,13 @@ namespace ZooPlanet.Repositories
 				.Where(x => x.IdClaseNavigation.Nombre == Id)
 				.OrderBy(x => x.Especie);
 		}
+        public override Especies GetById(object id)
+        {
+		
+            return Context.Especies.Include(x=>x.IdClaseNavigation).FirstOrDefault(x=>x.Id==(int)id);
+        }
 
-		public override bool Validate(Especies e)
+        public override bool Validate(Especies e)
         {
 			if(string.IsNullOrWhiteSpace(e.Especie))
             {

@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace ZooPlanet
 {
@@ -18,7 +20,11 @@ namespace ZooPlanet
         {
             services.AddMvc();
             services.AddSingleton<ZooPlanet.Services.MenuServices>();
+            services.AddDbContext<Models.animalesContext>(
+                options => options.UseMySql("server=localhost; user id=root; password=root; database=animales")
+                );
         }
+        public IWebHostEnvironment Environment;
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -30,15 +36,13 @@ namespace ZooPlanet
 
             app.UseRouting();
             app.UseFileServer();
+            Environment = env;
+
 
             app.UseEndpoints(endpoints =>
             {
-                
-                endpoints.MapControllerRoute(name:"default", pattern:"{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute(name: "areas", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
-
-
-
+                endpoints.MapControllerRoute(name:"default", pattern:"{controller=Home}/{action=Index}/{id?}");          
             });
         }
     }

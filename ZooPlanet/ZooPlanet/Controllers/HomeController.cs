@@ -11,21 +11,23 @@ namespace ZooPlanet.Controllers
 {
     public class HomeController : Controller
     {
-        
+        animalesContext context;
+        public HomeController(animalesContext ctx)
+        {
+            context = ctx;
+        }
         [Route("/")]
         public IActionResult Index()
         {
-            using animalesContext ctx = new animalesContext();
-            ClasesRepository clasesRepository = new ClasesRepository(ctx);
+            ClasesRepository clasesRepository = new ClasesRepository(context);
             return View(clasesRepository.GetAll().ToList());
         }
-        [Route("{id}")]
+        [Route("{Id}")]
         public IActionResult Clase(string Id)
         {
-            animalesContext ctx = new animalesContext();
 
             ViewBag.Clase = Id;
-            EspeciesRepository especiesRepository = new EspeciesRepository(ctx);
+            EspeciesRepository especiesRepository = new EspeciesRepository(context);
             return View(especiesRepository.GetEspeciesByClase(Id));
 
         }

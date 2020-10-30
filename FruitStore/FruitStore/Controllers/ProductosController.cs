@@ -14,7 +14,7 @@ namespace FruitStore.Controllers
     public class ProductosController : Controller
     {
 
-        public IHostingEnvironment Enviroment { get; set; }
+        public IHostingEnvironment Enviroment { get; set; } 
         public ProductosController(IHostingEnvironment env)
         {
             Enviroment = env;

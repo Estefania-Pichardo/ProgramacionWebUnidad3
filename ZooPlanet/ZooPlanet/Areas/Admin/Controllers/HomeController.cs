@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using ZooPlanet.Models;
@@ -12,20 +14,26 @@ namespace ZooPlanet.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class HomeController : Controller
-    {    
+    {
+        public IWebHostEnvironment Environment { get; set; }
+        animalesContext context;
+        public HomeController(IWebHostEnvironment env, animalesContext ctx)
+        {
+            Environment = env;
+            context = ctx;
+        }
         public IActionResult Index()
         {
-            animalesContext context = new animalesContext();
+
             EspeciesRepository repos = new EspeciesRepository(context);
 
             var listaEspecies = repos.GetAll();
 
             return View(listaEspecies);
         }
-
+        
         public IActionResult Agregar()
         {
-            animalesContext context = new animalesContext();
             EspeciesViewModel vm = new EspeciesViewModel();
             ClasesRepository clases = new ClasesRepository(context);
             vm.Clases = clases.GetAll();
@@ -34,14 +42,13 @@ namespace ZooPlanet.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Agregar(EspeciesViewModel vm)
         {
-            animalesContext context = new animalesContext();
 
             try
             {
                 EspeciesRepository repos = new EspeciesRepository(context);
                 repos.Insert(vm.Especie);
 
-                return RedirectToAction("Index");
+                return RedirectToAction("Index","Home");
             }
             catch (Exception ex)
             {
@@ -54,12 +61,11 @@ namespace ZooPlanet.Areas.Admin.Controllers
 
         public IActionResult Editar(int id)
         {
-            animalesContext context = new animalesContext();
             EspeciesViewModel vm = new EspeciesViewModel();
             EspeciesRepository EspeciesRepos = new EspeciesRepository(context);
 
             vm.Especie = EspeciesRepos.GetById(id);
-            if(vm.Especie==null)
+            if (vm.Especie == null)
             {
                 return RedirectToAction("Index");
             }
@@ -72,13 +78,12 @@ namespace ZooPlanet.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult Editar(EspeciesViewModel vm)
         {
-            animalesContext context = new animalesContext();
 
             try
             {
                 EspeciesRepository EspeciesRepos = new EspeciesRepository(context);
                 var esp = EspeciesRepos.GetById(vm.Especie.Id);
-                if(esp!=null)
+                if (esp != null)
                 {
                     esp.Especie = vm.Especie.Especie;
                     esp.Habitat = vm.Especie.Habitat;
@@ -102,48 +107,92 @@ namespace ZooPlanet.Areas.Admin.Controllers
 
         public IActionResult Eliminar(int id)
         {
-            using (animalesContext context = new animalesContext())
-            {
-                EspeciesRepository especiesRepos = new EspeciesRepository(context);
-                var esp = especiesRepos.GetById(id);
 
-                if(esp!=null)
-                {
-                    return View(esp);
-                }
-                else
-                {
-                    return RedirectToAction("Index");
-                }
+            EspeciesRepository especiesRepos = new EspeciesRepository(context);
+            var esp = especiesRepos.GetById(id);
+
+            if (esp != null)
+            {
+                return View(esp);
             }
-                
+            else
+            {
+                return RedirectToAction("Index");
+            }
+
+
         }
 
         [HttpPost]
         public IActionResult Eliminar(Especies e)
         {
-            using(animalesContext context=new animalesContext())
-            {
-                EspeciesRepository repos = new EspeciesRepository(context);
-                var esp = repos.GetById(e.Id);
 
-                if(esp!=null)
+            EspeciesRepository repos = new EspeciesRepository(context);
+            var esp = repos.GetById(e.Id);
+
+            if (esp != null)
+            {
+                repos.Delete(esp);
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError("", "La especie no existe o ya ha sido eliminada");
+                return View(e);
+            }
+
+        }
+
+
+        public IActionResult Imagen(int id)
+        {
+            EspeciesViewModel vm = new EspeciesViewModel();
+            EspeciesRepository repos = new EspeciesRepository(context);
+
+            vm.Especie = repos.GetById(id);
+            if (vm.Especie == null)
+            {
+                return RedirectToAction("Index");
+            }
+            if (System.IO.File.Exists(Environment.WebRootPath + $"/especies/{vm.Especie.Id}.jpg"))
+            {
+                vm.Imagen = $"{vm.Especie.Id}.jpg";
+            }
+            else
+            {
+                vm.Imagen = "nophoto.jpg";
+            }
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult Imagen(EspeciesViewModel vm)
+        {
+            try
+            {
+                if (vm.Archivo == null)
                 {
-                    repos.Delete(esp);
-                    return RedirectToAction("Index");
+                    ModelState.AddModelError("", "Debe seleccionar una imagen");
+                    return View(vm);
+
                 }
                 else
                 {
-                    ModelState.AddModelError("", "La especie no existe o ya ha sido eliminada");
-                    return View(e);
+                    if (vm.Archivo.ContentType != "image/jpeg" || vm.Archivo.Length > 1024 * 1024 * 2)
+                    {
+                        ModelState.AddModelError("", "Debe seleccionar un archivo jpeg menor a 2mb.");
+                        return View(vm);
+                    }
+                    FileStream fs = new FileStream(Environment.WebRootPath + $"/especies/{vm.Especie.Id}.jpg", FileMode.Create);
+                    vm.Archivo.CopyTo(fs);
+                    return RedirectToAction("Index");
                 }
             }
-        }
-
-        
-        public IActionResult Imagen(int id)
-        {
-            return View();
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(vm);
+            }
         }
     }
 }
